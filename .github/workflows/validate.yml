@@ -1,0 +1,58 @@
+name: Validate
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    name: Package
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          coverage: none
+
+      - name: Validate Composer metadata
+        run: composer validate --strict --no-check-publish
+
+      - name: Lint translation files
+        run: find resources -name '*.php' -print0 | xargs -0 -n1 php -l
+
+      - name: Validate LaraWA manifest
+        run: |
+          php <<'PHP'
+          <?php
+          $manifest = json_decode(file_get_contents('larawa-plugin.json'), true, 512, JSON_THROW_ON_ERROR);
+          $composer = json_decode(file_get_contents('composer.json'), true, 512, JSON_THROW_ON_ERROR);
+
+          $checks = [
+              'plugin id' => ($manifest['id'] ?? null) === 'larawa-lang-zh-hant',
+              'plugin type' => ($manifest['type'] ?? null) === 'language',
+              'free license flag' => ($manifest['license_required'] ?? null) === false,
+              'composer MIT license' => ($composer['license'] ?? null) === 'MIT',
+              'auth translations' => is_file('resources/lang/zh-Hant/auth.php'),
+              'dashboard translations' => is_file('resources/lang/zh-Hant/dashboard.php'),
+              'error translations' => is_file('resources/lang/zh-Hant/errors.php'),
+          ];
+
+          foreach ($checks as $label => $passed) {
+              if (! $passed) {
+                  fwrite(STDERR, "Failed manifest check: {$label}\n");
+                  exit(1);
+              }
+          }
+          PHP
