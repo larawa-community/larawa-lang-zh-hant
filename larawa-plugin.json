@@ -1,0 +1,19 @@
+{
+    "id": "larawa-lang-zh-hant",
+    "name": "Traditional Chinese Dashboard Translation",
+    "version": "1.0.0",
+    "type": "language",
+    "description": "Adds Traditional Chinese translations for the LaraWA dashboard.",
+    "required_core_version": "^13.0",
+    "license_required": false,
+    "service_providers": [],
+    "translations": {
+        "larawa-lang-zh-hant": "resources/lang"
+    },
+    "locales": {
+        "zh-Hant": {
+            "label": "Traditional Chinese",
+            "native": "繁體中文"
+        }
+    }
+}

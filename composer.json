@@ -1,0 +1,31 @@
+{
+    "name": "larawa/larawa-lang-zh-hant",
+    "type": "larawa-plugin",
+    "description": "Traditional Chinese dashboard language plugin for LaraWA.",
+    "homepage": "https://lara-wa.org",
+    "keywords": [
+        "larawa",
+        "larawa-plugin",
+        "language-pack",
+        "traditional-chinese",
+        "translation"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "LaraWA Community"
+        }
+    ],
+    "require": {
+        "php": "^8.4"
+    },
+    "support": {
+        "issues": "https://github.com/larawa-community/larawa-lang-zh-hant/issues",
+        "source": "https://github.com/larawa-community/larawa-lang-zh-hant"
+    },
+    "extra": {
+        "larawa": {
+            "manifest": "larawa-plugin.json"
+        }
+    }
+}
